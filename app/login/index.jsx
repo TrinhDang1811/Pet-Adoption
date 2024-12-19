@@ -1,6 +1,6 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React, { useCallback } from "react";
-import Colors from "../login/Colors";
+import Colors from "../constants/Colors";
 import * as WebBrowser from 'expo-web-browser'
 import { useOAuth } from '@clerk/clerk-expo'
 import * as Linking from 'expo-linking'
@@ -26,7 +26,7 @@ export default function LoginScreen() {
     const onPress = useCallback(async () => {
         try {
           const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-            redirectUrl: Linking.createURL('/home', { scheme: 'myapp' }),
+            redirectUrl: Linking.createURL('/(tabs)/home', { scheme: 'traveler' }),
           })
     
           // If sign in was successful, set the active session

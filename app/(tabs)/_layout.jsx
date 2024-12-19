@@ -1,54 +1,27 @@
-import * as SecureStore from "expo-secure-store";
-import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
+import { View, Text } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
+import { Tabs } from "expo-router";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const createTokenCache = () => {
-  return {
-    getToken: async (key) => {
-      try {
-        const item = await SecureStore.getItemAsync(key);
-        if (item) {
-          console.log(`${key} was used 🔐 \n`);
-        } else {
-          console.log("No values stored under key: " + key);
-        }
-        return item;
-      } catch (error) {
-        console.error("secure store get item error: ", error);
-        await SecureStore.deleteItemAsync(key);
-        return null;
-      }
-    },
-    saveToken: (key, token) => {
-      return SecureStore.setItemAsync(key, token);
-    },
-  };
-};
-
-const tokenCache = createTokenCache();
-
-export default function RootLayout() {
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-  useFonts({
-    outfit: require("./../assets/fonts/Outfit-Regular.ttf"),
-    "outfit-bold": require("./../assets/fonts/Outfit-Bold.ttf"),
-    "outfit-medium": require("./../assets/fonts/Outfit-Medium.ttf"),
-  });
-
+export default function TabLayout() {
   return (
-    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
-      <Stack>
-        <Stack.Screen name="index" />
-        <Stack.Screen
-          name="login/index"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-    </ClerkProvider>
+    <Tabs>
+      <Tabs.Screen name="home"
+      options={{
+        headerShown: false,
+        title: "Home",
+        tabBarIcon:({color})=><Ionicons name="home" size={24} color={color} />
+      }}
+      />
+      <Tabs.Screen name="favorite"
+      options={{
+        headerShown: false,
+        title: "Favorite",
+        tabBarIcon:({color})=><Ionicons name="heart" size={24} color={color} />
+      }}
+      />
+      <Tabs.Screen name="inbox" />
+      <Tabs.Screen name="profile" />
+    </Tabs>
   );
 }
