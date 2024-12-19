@@ -2,7 +2,7 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 import Colors from "../../app/constants/Colors";
 
-export default function PetSubInfoCard({icon, title, value}) {
+export default function PetSubInfoCard({ icon, title, value }) {
   return (
     <View
       style={{
@@ -24,9 +24,11 @@ export default function PetSubInfoCard({icon, title, value}) {
           height: 40,
         }}
       />
-      <View style = {{
-        flex: 1,
-      }}>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
         <Text
           style={{
             fontFamily: "outfit",
