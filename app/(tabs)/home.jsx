@@ -1,7 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Header from '../../components/Home/Header'
 import Slider from '../../components/Home/Slider'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Colors from '../constants/Colors'
 import PetListByCategory from '../../components/Home/PetListByCategory'
 
 export default function Home() {
@@ -21,7 +23,33 @@ export default function Home() {
 
 
       {/* Add new Pet option */}
-
+      <TouchableOpacity style={styles.addNewPetContainer}
+      >
+      <MaterialIcons name="pets" size={24} color={Colors.PRIMARY}/>
+      <Text style={{
+        fontFamily: 'outfit-medium',
+        fontSize: 18,
+        color: Colors.PRIMARY
+      }}>Add New Pet</Text>
+      </TouchableOpacity>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  addNewPetContainer: {
+    
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 10,
+      alignItems: 'center',
+      padding: 10,
+      marginTop: 20,
+      backgroundColor: Colors.LIGHT_PRIMARY,
+      borderColor: Colors.PRIMARY,
+      borderWidth: 1,
+      borderRadius: 15,
+      borderStyle: 'dashed',
+      justifyContent : 'center'
+  }
+})

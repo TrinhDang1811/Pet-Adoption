@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import Colors from "../../app/constants/Colors";
 
-export default function Category() {
+export default function Category({category}) {
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Fish");
 
@@ -45,7 +45,9 @@ export default function Category() {
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <TouchableOpacity
-            onPress={() => setSelectedCategory(item.name)}
+            onPress={() => 
+              {setSelectedCategory(item.name);
+              category(item.name)}}
             style={{
               flex: 1,
             }}
