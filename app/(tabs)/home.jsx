@@ -4,7 +4,9 @@ import Header from '../../components/Home/Header'
 import Slider from '../../components/Home/Slider'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Colors from '../constants/Colors'
+import { Link } from 'expo-router'
 import PetListByCategory from '../../components/Home/PetListByCategory'
+import { useNavigation } from 'expo-router'
 
 export default function Home() {
   return (
@@ -23,7 +25,9 @@ export default function Home() {
 
 
       {/* Add new Pet option */}
-      <TouchableOpacity style={styles.addNewPetContainer}
+      <Link 
+      href={'/add-new-pet'}
+      style={styles.addNewPetContainer}
       >
       <MaterialIcons name="pets" size={24} color={Colors.PRIMARY}/>
       <Text style={{
@@ -31,7 +35,7 @@ export default function Home() {
         fontSize: 18,
         color: Colors.PRIMARY
       }}>Add New Pet</Text>
-      </TouchableOpacity>
+      </Link>
     </View>
   )
 }
@@ -45,6 +49,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 10,
       marginTop: 20,
+      textAlign: 'center',
       backgroundColor: Colors.LIGHT_PRIMARY,
       borderColor: Colors.PRIMARY,
       borderWidth: 1,

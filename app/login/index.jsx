@@ -32,6 +32,7 @@ export default function LoginScreen() {
           // If sign in was successful, set the active session
           if (createdSessionId) {
             
+            await setActive({ session: createdSessionId });
           } else {
             // Use signIn or signUp returned from startOAuthFlow
             // for next steps, such as MFA
