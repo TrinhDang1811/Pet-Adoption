@@ -23,7 +23,7 @@ export default function LoginScreen() {
     useWarmUpBrowser();
     const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
 
-    const onPress = useCallback(async () => {
+    const onPressLogin = useCallback(async () => {
         try {
           const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
             redirectUrl: Linking.createURL('/(tabs)/home', { scheme: 'myapp' }),
@@ -84,7 +84,7 @@ export default function LoginScreen() {
         </Text>
 
         <Pressable
-        onPress={onPress}
+        onPress={onPressLogin}
           style={{
             padding: 14,
             marginTop: 60,

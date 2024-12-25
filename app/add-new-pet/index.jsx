@@ -14,12 +14,12 @@ import React, { useState } from "react";
 import Colors from "../constants/Colors";
 import { useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { db, storage } from "../../config/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable } from "react-native";
-import { getDownloadURL, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useUser } from "@clerk/clerk-expo";
 
 export default function AddNewPet() {
@@ -31,6 +31,7 @@ export default function AddNewPet() {
   const [image, setImage] = useState();
   const {user} = useUser();
   const [loader, setLoader] = useState();
+  const router = useRouter();
 
 
   useEffect(() => {
@@ -83,13 +84,15 @@ export default function AddNewPet() {
     setLoader(true)
     const resp = await fetch(image);
     const blobImage = await resp.blob();
-    const storageRef = ref(storage)
+    const storageRef = ref(storage, 'images/'+Date.now()+ '.jpg');
 
     uploadBytes(storageRef, blobImage).then((snapshot)=>{
+      console.log('File uploaded')
       
     }).then(resp=>{
       getDownloadURL(storageRef).then(async(downloadUrl)=>{
-
+        console.log(downloadUrl);
+        SaveFormDate(downloadUrl)
       })
     })
   }
@@ -105,7 +108,7 @@ export default function AddNewPet() {
       id:docId
     })
     setLoader=(false)
-
+    router.replace('/(tabs)/home')
   }
 
   return (
