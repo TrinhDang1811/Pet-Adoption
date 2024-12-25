@@ -4,18 +4,18 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-} from "react-native";
-import React, { useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import PetInfo from "../../components/PetDetails/PetInfo";
-import PetSubInfo from "../../components/PetDetails/PetSubInfo";
-import AboutPet from "../../components/PetDetails/AboutPet";
-import OwnerInfo from "../../components/PetDetails/OwnerInfo";
-import Colors from "../constants/Colors";
-import { useUser } from "@clerk/clerk-expo";
-import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
-import { db } from "../../config/FirebaseConfig";
+} from 'react-native';
+import React, { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import PetInfo from '../../components/PetDetails/PetInfo';
+import PetSubInfo from '../../components/PetDetails/PetSubInfo';
+import AboutPet from '../../components/PetDetails/AboutPet';
+import OwnerInfo from '../../components/PetDetails/OwnerInfo';
+import Colors from '../constants/Colors';
+import { useUser } from '@clerk/clerk-expo';
+import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
+import { db } from '../../config/FirebaseConfig';
 
 export default function PetDetails() {
   const pet = useLocalSearchParams();
@@ -26,17 +26,17 @@ export default function PetDetails() {
   useEffect(() => {
     navigation.setOptions({
       headerTransparent: true,
-      headerTitle: "",
+      headerTitle: '',
     });
   }, []);
 
   const InitiateChat = async () => {
-    const docId1 = user?.primaryEmailAddress?.emailAddress + "_" + pet?.email;
-    const docId2 = pet?.email + "_" + user?.primaryEmailAddress?.emailAddress;
+    const docId1 = user?.primaryEmailAddress?.emailAddress + '_' + pet?.email;
+    const docId2 = pet?.email + '_' + user?.primaryEmailAddress?.emailAddress;
 
     const q = query(
-      collection(db, "Chats"),
-      where("id", "in", [docId1, docId2])
+      collection(db, 'Chats'),
+      where('id', 'in', [docId1, docId2])
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -47,7 +47,7 @@ export default function PetDetails() {
     });
 
     if (querySnapshot.docs?.length ==0){
-      await setDoc(doc(db, "Chats", docId1), {
+      await setDoc(doc(db, 'Chats', docId1), {
         id: docId1,
         users: [{
           email: user?.primaryEmailAddress?.emailAddress,
@@ -95,8 +95,8 @@ export default function PetDetails() {
         <TouchableOpacity onPress={InitiateChat} style={styles.adoptBtn}>
           <Text
             style={{
-              textAlign: "center",
-              fontFamily: "outfit-medium",
+              textAlign: 'center',
+              fontFamily: 'outfit-medium',
               fontSize: 20,
             }}
           >
@@ -114,8 +114,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PRIMARY,
   },
   bottomContainer: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     bottom: 0,
   },
 });
