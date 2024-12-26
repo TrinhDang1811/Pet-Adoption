@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation, useRouter } from "expo-router";
 import { db, storage } from "../../config/FirebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable } from "react-native";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -29,10 +29,9 @@ export default function AddNewPet() {
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [image, setImage] = useState();
-  const {user} = useUser();
+  const { user } = useUser();
   const [loader, setLoader] = useState();
   const router = useRouter();
-
 
   useEffect(() => {
     navigation.setOptions({
@@ -77,39 +76,40 @@ export default function AddNewPet() {
       ToastAndroid.show("Please fill all the fields", ToastAndroid.SHORT);
       return;
     }
-    UploadImage();
+
+    SaveFormDate();
   };
 
-  const UploadImage=async()=>{
-    setLoader(true)
-    const resp = await fetch(image);
-    const blobImage = await resp.blob();
-    const storageRef = ref(storage, 'images/'+Date.now()+ '.jpg');
+  // const UploadImage=async()=>{
+  //   setLoader(true)
+  //   const resp = await fetch(image);
+  //   const blobImage = await resp.blob();
+  //   const storageRef = ref(storage, 'images/'+Date.now()+ '.jpg');
 
-    uploadBytes(storageRef, blobImage).then((snapshot)=>{
-      console.log('File uploaded')
-      
-    }).then(resp=>{
-      getDownloadURL(storageRef).then(async(downloadUrl)=>{
-        console.log(downloadUrl);
-        SaveFormDate(downloadUrl)
-      })
-    })
-  }
+  //   uploadBytes(storageRef, blobImage).then((snapshot)=>{
+  //     console.log('File uploaded')
 
-  const SaveFormDate=async(imageUrl)=>{
+  //   }).then(resp=>{
+  //     getDownloadURL(storageRef).then(async(downloadUrl)=>{
+  //       console.log(downloadUrl);
+  //       SaveFormDate(downloadUrl)
+  //     })
+  //   })
+  // }
+
+  const SaveFormDate = async (downloadUrl) => {
     const docId = Date.now().toString();
-    await setDoc(doc(db,'Pets', docId),{
+    await setDoc(doc(db, "Pets", docId), {
       ...formData,
-      imageUrl:imageUrl,
-      username:user?.fullName,
-      email:user?.primaryEmailAddress.emailAddress,
-      userImage:user?.imageUrl,
-      id:docId
-    })
-    setLoader=(false)
-    router.replace('/(tabs)/home')
-  }
+      username: user?.fullName,
+      email: user?.primaryEmailAddress.emailAddress,
+      userImage: user?.imageUrl,
+      imageUrl: downloadUrl || null,
+      id: docId,
+    });
+    setLoader(false);
+    router.replace("/(tabs)/home");
+  };
 
   return (
     <ScrollView
@@ -244,7 +244,11 @@ export default function AddNewPet() {
         />
       </View>
 
-      <TouchableOpacity disabled={loader} onPress={onSubmit} style={styles.button}>
+      <TouchableOpacity
+        disabled={loader}
+        onPress={onSubmit}
+        style={styles.button}
+      >
         {loader ? (
           <ActivityIndicator size={"large"} />
         ) : (
