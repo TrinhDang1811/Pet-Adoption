@@ -12,7 +12,7 @@ import moment from "moment";
 
 export default function ChatScreen() {
   const params = useLocalSearchParams();
-  const naigation = useNavigation();
+  const navigation = useNavigation();
   const { user } = useUser();
 
   const [messages, setMessages] = useState([])
@@ -40,7 +40,7 @@ export default function ChatScreen() {
 
     const otherUser=result?.users.filter(item=>item.email!=user?.primaryEmailAddress?.emailAddress);
     console.log(otherUser);
-    naigation.setOptions({
+    navigation.setOptions({
       headerTitle: otherUser[0]?.name,
       headerBackTitle: "Back",
     });
