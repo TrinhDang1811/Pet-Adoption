@@ -1,14 +1,13 @@
 import { View, Text, Image, Pressable } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import Colors from "../constants/Colors";
 import * as WebBrowser from 'expo-web-browser'
-import { useOAuth } from '@clerk/clerk-expo'
-import * as Linking from 'expo-linking'
+import { useAuth, useOAuth, useUser } from '@clerk/clerk-expo'
+import * as Linking from 'expo-linking';
+import { router, useRouter } from "expo-router";
 
 export const useWarmUpBrowser = () => {
     React.useEffect(() => {
-      // Warm up the android browser to improve UX
-      // https://docs.expo.dev/guides/authentication/#improving-user-experience
       void WebBrowser.warmUpAsync()
       return () => {
         void WebBrowser.coolDownAsync()
@@ -43,6 +42,16 @@ export default function LoginScreen() {
           console.error(JSON.stringify(err, null, 2))
         }
       }, [])
+
+      const { user } = useUser();
+      const { isSignedIn } = useAuth();
+      console.log(user, "User Logged Out");
+
+      useEffect(() => {
+        if(user){
+            router.push("/home")
+        }
+      },[isSignedIn])
     
 
   return (
