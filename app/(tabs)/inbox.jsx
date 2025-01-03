@@ -73,8 +73,7 @@ export default function Inbox() {
         refreshing={loader}
         onRefresh={GetUserList}
         style={{
-          marginTop:20,
-
+          marginTop: 20,
         }}
         renderItem={({ item, index }) => (
           <UserItem userInfo={item} key={index} />

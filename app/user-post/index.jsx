@@ -43,10 +43,10 @@ export default function UserPost() {
     ]);
   };
 
-  const deletePost=async(docId)=>{
-    await deleteDoc(doc(db, 'Pets', docId));
+  const deletePost = async (docId) => {
+    await deleteDoc(doc(db, "Pets", docId));
     GetUserPost();
-  }
+  };
 
   const GetUserPost = async () => {
     setLoader(true);

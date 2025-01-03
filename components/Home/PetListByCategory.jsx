@@ -5,7 +5,6 @@ import { getDocs, collection, query, where } from "firebase/firestore";
 import { db } from "../../config/FirebaseConfig";
 import { useState, useEffect } from "react";
 import PetListItem from "./PetListItem";
-import { use } from "react";
 
 export default function PetListByCategory() {
   const [petList, setPetList] = useState([]);

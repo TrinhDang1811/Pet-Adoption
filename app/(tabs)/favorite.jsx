@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Shared from "../../Shared/Shared";
 import { useUser } from "@clerk/clerk-expo";
 import { db } from "../../config/FirebaseConfig";
-import PetListItem from '../../components/Home/PetListItem';
+import PetListItem from "../../components/Home/PetListItem";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Favorite() {
@@ -22,19 +22,20 @@ export default function Favorite() {
     setFavIds(result?.favorites);
     setLoader(false);
     GetFavPetList(result?.favorites);
-
   };
 
   const GetFavPetList = async (favId_) => {
     setLoader(true);
     setFavPetList([]);
-    const q = query(collection(db, "Pets"), where("id", "in", favId_));
-    const querySnapshot = await getDocs(q);
+    if (favId_ && favId_.length > 0) {
+      const q = query(collection(db, "Pets"), where("id", "in", favId_));
+      const querySnapshot = await getDocs(q);
 
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-      setFavPetList((prev) => [...prev, doc.data()]);
-    });
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        setFavPetList((prev) => [...prev, doc.data()]);
+      });
+    }
     setLoader(false);
   };
 
@@ -54,18 +55,17 @@ export default function Favorite() {
         Favorites
       </Text>
 
-        <FlatList
-          data={favPetList}
-          numColumns={2}
-          onRefresh={GetFavPetIds}
-          refreshing={loader}
-          renderItem={({ item, index }) => (
-            <View>
-              <PetListItem pet={item}/>
-            </View>
-          )}
-        />
-
+      <FlatList
+        data={favPetList}
+        numColumns={2}
+        onRefresh={GetFavPetIds}
+        refreshing={loader}
+        renderItem={({ item, index }) => (
+          <View>
+            <PetListItem pet={item} />
+          </View>
+        )}
+      />
     </View>
   );
 }

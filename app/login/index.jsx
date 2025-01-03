@@ -1,58 +1,56 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import Colors from "../constants/Colors";
-import * as WebBrowser from 'expo-web-browser'
-import { useAuth, useOAuth, useUser } from '@clerk/clerk-expo'
-import * as Linking from 'expo-linking';
+import * as WebBrowser from "expo-web-browser";
+import { useAuth, useOAuth, useUser } from "@clerk/clerk-expo";
+import * as Linking from "expo-linking";
 import { router, useRouter } from "expo-router";
 
 export const useWarmUpBrowser = () => {
-    React.useEffect(() => {
-      void WebBrowser.warmUpAsync()
-      return () => {
-        void WebBrowser.coolDownAsync()
-      }
-    }, [])
-  }
-  
-  WebBrowser.maybeCompleteAuthSession()
+  React.useEffect(() => {
+    void WebBrowser.warmUpAsync();
+    return () => {
+      void WebBrowser.coolDownAsync();
+    };
+  }, []);
+};
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
+  useWarmUpBrowser();
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
-    useWarmUpBrowser();
-    const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
+  const onPressLogin = useCallback(async () => {
+    try {
+      const { createdSessionId, signIn, signUp, setActive } =
+        await startOAuthFlow({
+          redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "myapp" }),
+        });
 
-    const onPressLogin = useCallback(async () => {
-        try {
-          const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-            redirectUrl: Linking.createURL('/(tabs)/home', { scheme: 'myapp' }),
-          })
-    
-          // If sign in was successful, set the active session
-          if (createdSessionId) {
-            
-            await setActive({ session: createdSessionId });
-          } else {
-            // Use signIn or signUp returned from startOAuthFlow
-            // for next steps, such as MFA
-          }
-        } catch (err) {
-          // See https://clerk.com/docs/custom-flows/error-handling
-          // for more info on error handling
-          console.error(JSON.stringify(err, null, 2))
-        }
-      }, [])
+      // If sign in was successful, set the active session
+      if (createdSessionId) {
+        await setActive({ session: createdSessionId });
+      } else {
+        // Use signIn or signUp returned from startOAuthFlow
+        // for next steps, such as MFA
+      }
+    } catch (err) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error(JSON.stringify(err, null, 2));
+    }
+  }, []);
 
-      const { user } = useUser();
-      const { isSignedIn } = useAuth();
-      console.log(user, "User Logged Out");
+  const { user } = useUser();
+  const { isSignedIn } = useAuth();
+  console.log(user, "User Logged Out");
 
-      useEffect(() => {
-        if(user){
-            router.push("/home")
-        }
-      },[isSignedIn])
-    
+  useEffect(() => {
+    if (user) {
+      router.push("/home");
+    }
+  }, [isSignedIn]);
 
   return (
     <View
@@ -93,7 +91,7 @@ export default function LoginScreen() {
         </Text>
 
         <Pressable
-        onPress={onPressLogin}
+          onPress={onPressLogin}
           style={{
             padding: 14,
             marginTop: 60,

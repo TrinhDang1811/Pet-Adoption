@@ -11,7 +11,6 @@ export default function Profile() {
   const { signOut } = useAuth();
 
   const onPressMenu = (menu) => {
-    
     if (menu.title === "Logout") {
       signOut().then(() => {
         router.push("/login");
@@ -23,10 +22,10 @@ export default function Profile() {
 
   const Menu = [
     {
-      id:5,
+      id: 5,
       title: "My Post",
-      icon:'bookmark',
-      path:'/../user-post'
+      icon: "bookmark",
+      path: "/../user-post",
     },
     {
       id: 1,
@@ -52,7 +51,6 @@ export default function Profile() {
       icon: "exit",
       path: "/logout",
     },
-    
   ];
 
   return (
